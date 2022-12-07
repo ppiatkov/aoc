@@ -19,3 +19,8 @@ f05:{
 	(value')(last''){x z/y}[d;j]each f@/:10b}
 
 f06:{a+0{-1+last first x[z]/(1b;y)}[{(y>count distinct x z+til y;1+z@:1)}first read0 x]\a:4 14}
+
+f07:{
+	f:{v:last o:" "vs y;$[y like"$ cd *";@[;1;$[v~1#"/";1#;v~"..";-1_;,[;enlist last[x 1],v,"/"]]];any y like/:("$ ls";"dir *");;@[;0;@[;x 1;("J"$first o)+0^]]]x};
+	d:asc value first(()!0#0;enlist 1#"/")f/read0 x;
+	(sum(1+d bin 100000)#d;d d binr last[d]-40000000)}

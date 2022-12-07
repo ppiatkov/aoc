@@ -17,3 +17,5 @@ f05:{
 	j:{"J"$(" "vs x)1 3 5}each(m+1)_r;
 	f:{a:(b:neg z 0)#y[z 1];y[z 1]:b _y[z 1];y[z 2],:$[x;reverse;]a;y};
 	(value')(last''){x z/y}[d;j]each f@/:10b}
+
+f06:{a+0{-1+last first x[z]/(1b;y)}[{(y>count distinct x z+til y;1+z@:1)}first read0 x]\a:4 14}

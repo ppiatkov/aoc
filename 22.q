@@ -24,3 +24,9 @@ f07:{
 	f:{v:last o:" "vs y;$[y like"$ cd *";@[;1;$[v~1#"/";1#;v~"..";-1_;,[;enlist last[x 1],v,"/"]]];any y like/:("$ ls";"dir *");;@[;0;@[;x 1;("J"$first o)+0^]]]x};
 	d:asc value first(()!0#0;enlist 1#"/")f/read0 x;
 	(sum(1+d bin 100000)#d;d d binr last[d]-40000000)}
+
+f08:{
+	f:{x>0N,-1_maxs x};
+	g:{(x{(count[x]-y+1)&1+flip[x[y]>/:(1+y)_x]?'0b}/:til c-1),enlist(c:count x)#0};
+	o:(a;reverse b;reverse a;b:flip a:read0 x);
+	(sum sum max@;max max prd@)@'(::;'[flip;reverse];reverse;flip)@'/:(f;g)@/:\:o}

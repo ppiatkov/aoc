@@ -30,3 +30,5 @@ f08:{
 	g:{(x{(count[x]-y+1)&1+flip[x[y]>/:(1+y)_x]?'0b}/:til c-1),enlist(c:count x)#0};
 	o:(a;reverse b;reverse a;b:flip a:read0 x);
 	(sum sum max@;max max prd@)@'(::;'[flip;reverse];reverse;flip)@'/:(f;g)@/:\:o}
+
+f09:{(count')(distinct'){{$[2>max abs d:y-x;x;x+1&-1|d]}\[0 0;x]}\[9;flip(sums')(raze')a[1]#'/:(1 -1 0 0;0 0 1 -1)@\:"RLUD"?first a:("CJ";" ")0:x]1 9}

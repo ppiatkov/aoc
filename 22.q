@@ -32,3 +32,28 @@ f08:{
 	(sum sum max@;max max prd@)@'(::;'[flip;reverse];reverse;flip)@'/:(f;g)@/:\:o}
 
 f09:{(count')(distinct'){{$[2>max abs d:y-x;x;x+1&-1|d]}\[0 0;x]}\[9;flip(sums')(raze')a[1]#'/:(1 -1 0 0;0 0 1 -1)@\:"RLUD"?first a:("CJ";" ")0:x]1 9}
+
+f10:{
+	b:sums -1_1,last a:('[1+;like[;"addx"]];0^)@'("SJ";" ")0:x;
+	(sum d*c -1+d:20+40*til 6;".#"0N 40#2>abs c-til[count c:b where a 0]mod 40)}
+
+f11:{
+	b:(where 0=count each a)_a:enlist[""],read0 x;
+	t:{`n`s`o`d`t`f!(0;"J"$", "vs 18_x 2;value"{[old]",(19_x 3),"}"),"J"$last'[" "vs'-3#x]}each b;
+	r:{[m;t]t{[m;t;j]
+		if[c:count v:m t[j;`o]t[j;`s];
+			t[j;`n]+:c;t[j;`s]:0#0;
+			g:group 0=v mod t[`d]j;
+			t[t[j;`t];`s],:v g 1b;t[t[j;`f];`s],:v g 0b];
+		t}[m]/til count t};
+	{prd 2#desc(y/[z;x])`n}[t]'[r@/:(div[;3];mod[;prd t`d]);20 10000]}
+
+f12:{
+	m:count first a:read0 x;
+	a:@[a;e:(a:raze a)?"SE";:;"az"];
+	g:{[a;e;m;x]
+		r:distinct raze o@'where each(2>a[x 1]-/:a o)&0W=x[0]o:x[1]+/:(1;-1;m;neg m);
+		(@[x 0;r;:;j];r;j:1+x 2;e in r)}["j"$a;e 0;m];
+	b:g/['[not;last];(@[count[a]#0W;e 1;:;0];-1#e;0;0b)];
+	(b 2;min b[0]where"a"=a)
+	}

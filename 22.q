@@ -53,3 +53,17 @@ f12:{
 		(@[x 0;r;:;j];r;j:1+x 2;e in r)}["j"$a;e 0;m];
 	b:g/['[not;last];(@[count[a]#0W;e 1;:;0];-1#e;0;0b)];
 	(b 2;min b[0]where"a"=a)}
+
+f13:{
+	a:("[[2]]";"[[6]]";""),read0 x;
+	b:{value ssr/[x;("[[]]";"[[]";",");("()";"enlist[";";")]}'[raze 2#'0N 3#a];
+	c:{$[(0>tx:type x)&0>ty:type y;$[x<y;-1;x=y;0;1];
+	(tx>=0)&ty<0;.z.s[x;enlist y];
+	(tx<0)&ty>=0;.z.s[enlist x;y];
+	last{[f;x;y;cx;cy;v]
+		$[(ex:cx=j)|ey:cy=j:v 1;(1;j+1;$[ex>ey;-1;ex<ey;1;0]);
+			($[r;1;0];j+1;r:f[x j;y j])]}[.z.s;x;y;count x;count y]/['[not;first];3#0]]};
+	s:{{$[2>c:count z;z;{raze{(z[0],z[2-a;0];a _z 1;(1-a:x . y z[1 2;0])_z 2)
+		}[x;y]/[{all count'[1_x]};enlist[0#z],z]}[x;y].z.s[x;y]each 2 0N#z]}[x;y;til count y]};
+	i:iasc s['[-1=;c];b];
+	(sum 1+where(</)flip 0N 2#2_i;prd 1+2#i)}

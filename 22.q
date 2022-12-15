@@ -67,3 +67,13 @@ f13:{
 		}[x;y]/[{all count'[1_x]};enlist[0#z],z]}[x;y].z.s[x;y]each 2 0N#z]}[x;y;til count y]};
 	i:iasc s['[-1=;c];b];
 	(sum 1+where(</)flip 0N 2#2_i;prd 1+2#i)}
+
+f14:{
+	b:{value each" -> "vs ssr[x;",";" "]}each read0 x;
+	c:distinct raze{(1#d),d[0]+\raze{signum[x]*/:abs[sum x]#1}each 1_d:deltas x}each b;
+	p:500-o:min(first min c;-2+500-h:3+last max c);
+	s:.[;;:;1b]/[(@[3+max d;0;(2*h+2)|])#0b;d:c-\:(o;0)];
+	s[;a:-1+count s 0]:1b;
+	f:{r:{v:y[1;0];w:y[1;1]+(y[1;1]_x v)?1b;$[not x[v-1;w];(1b;(v-1;w));x[v+1;w];(0b;(v;w-1));(1b;(v+1;w))]
+		}[s:z 2]/[first;(1b;(x;0))];$[y=r[1;1];(0b;1+z 1;s);(1b;1+z 1;.[s;r 1;:;1b])]}p;
+	-1 0+(1b;0;s){y/[first;x]1}/:f@/:(a-1;0)}

@@ -77,3 +77,118 @@ f14:{
 	f:{r:{v:y[1;0];w:y[1;1]+(y[1;1]_x v)?1b;$[not x[v-1;w];(1b;(v-1;w));x[v+1;w];(0b;(v;w-1));(1b;(v+1;w))]
 		}[s:z 2]/[first;(1b;(x;0))];$[y=r[1;1];(0b;1+z 1;s);(1b;1+z 1;.[s;r 1;:;1b])]}p;
 	-1 0+(1b;0;s){y/[first;x]1}/:f@/:(a-1;0)}
+
+f17:{
+	push::?[">"=first read0 x;1;-1];
+	rocks::(0 1 2 3;1 9 10 11 19;0 1 2 11 20;0 9 18 27;0 1 9 10)+39;
+	rounds::enlist`towerBlocks`floorHeight`totalHeight`nextRock`nextPush!(0#0;0;0;0;0);
+	move::{[]
+		if[all mod[movedRock:rock+push pushIdx;9]within 1 7;
+			if[not any movedRock in state`towerBlocks;rock::movedRock]];
+		pushIdx::(pushIdx+1)mod count push;
+		$[9>min movedRock:rock-9;0b;any movedRock in state`towerBlocks;0b;[rock::movedRock;1b]]};
+	fall::{[]
+		state::last rounds;
+		pushIdx::state`nextPush;
+		rock::rocks[state`nextRock]+9*({$[count x;max x;0]}state`towerBlocks)div 9;
+		(::)move/1b;
+		newTowerBlocks:state[`towerBlocks],rock;
+		shift:{0^last where 7=count each(union':)value(x mod 9)group x div 9}newTowerBlocks;
+		if[shift;
+			newTowerBlocks-:shift*9;
+			newTowerBlocks@:where newTowerBlocks>8];
+		newFloorHeight:shift+state`floorHeight;
+		newTotalHeight:newFloorHeight+0^max[newTowerBlocks]div 9;
+		newNextRock:(1+state`nextRock)mod count rocks;
+		dejaVu:count[rounds]>j:(k#rounds)?(k:`towerBlocks`nextRock`nextPush)!(newTowerBlocks;newNextRock;pushIdx);
+		`rounds upsert(newTowerBlocks;newFloorHeight;newTotalHeight;newNextRock;pushIdx);
+		$[dejaVu;j;0N]};
+	cycleStart::null fall/0N;
+	cyclePeriod::-1+count[rounds]-cycleStart;
+	heightPerCycle::(-/)rounds[`totalHeight]cycleStart+cyclePeriod,0;
+	getHeight:{[n]
+		$[n<cycleStart;rounds[n;`totalHeight];
+			rounds[cycleStart+(n-cycleStart)mod cyclePeriod;`totalHeight]+heightPerCycle*(n-cycleStart)div cyclePeriod]};
+	getHeight each 2022 1000000000000}
+
+f18:{
+	lava::flip`x`y`z!("JJJ";",")0:x;
+	countSides:{[t]
+		sides:{2*1+sum 1<1_deltas asc x};
+		sx:exec sum s from select s:sides x by y,z from t;
+		sy:exec sum s from select s:sides y by x,z from t;
+		sz:exec sum s from select s:sides z by x,y from t;
+		sx+sy+sz};
+	vals:{x+til 1+y-x}.;
+	cx:count xvals:vals xrange::(min;max)@\:lava`x;
+	cy:count yvals:vals yrange::(min;max)@\:lava`y;
+	cz:count zvals:vals zrange::(min;max)@\:lava`z;
+	yzFaces:raze flip each`x`y`z!/:(;(cy*cz)#yvals;zvals where cz#cy)each xrange;
+	xzFaces:raze flip each`x`y`z!/:((cx*cz)#xvals;;zvals where cz#cx)each yrange;
+	xyFaces:raze flip each`x`y`z!/:((cx*cy)#xvals;yvals where cy#cx;)each zrange;
+	surface:distinct xyFaces,yzFaces,xzFaces;
+	frontier::externAir::surface except lava;
+	propagateAir:{[b]
+		`frontier upsert raze raze[`x`y`z{![;();0b;enlist[x]!enlist(y;x;1)]}\:/:(+;-)]@\:frontier;
+		frontier::frontier except externAir,lava;
+		if[last b;
+			frontier::select from frontier where x within xrange,y within yrange,z within zrange];
+		$[count frontier;[`externAir upsert frontier;10b];00b]};
+	first propagateAir/11b;
+	findGaps:{[t]
+		g:{(m+til 1+max[x]-m:min x)except x};
+		gx:ungroup `x`y`z#0!select g x by y,z from t;
+		gy:ungroup `x`y`z#0!select g y by x,z from t;
+		gz:ungroup `x`y`z#0!select g z by x,y from t;
+		distinct gx,gy,gz};
+	countSides each(lava;lava,findGaps[lava]except externAir)}
+
+f19:{
+	blueprints::{`id`m1r1`m1r2`m1r3`m2r3`m1r4`m3r4!"J"$@[" "vs x;1;-1_]1 6 12 18 21 27 30}each read0 x;
+	initialStates::enlist`m1`m2`m3`m4`r1`r2`r3`r4!0 0 0 0 1 0 0 0;
+	skipBuild::{[blueprint;states]
+		states:delete from states where r1=blueprint`m1r4,r3=blueprint`m3r4,m1>=blueprint`m1r4,m3>=blueprint`m3r4;
+		update m1:m1+r1,m2:m2+r2,m3:m3+r3,m4:m4+r4 from states};
+	buildOreRobot::{[blueprint;states]
+		states:delete from states where r1=blueprint`m1r4,r3=blueprint`m3r4;
+		oreCost:blueprint`m1r1;
+		t:select from states where m1>=oreCost,r1<max blueprint`m1r1`m1r2`m1r3`m1r4;
+		update r1:r1+1,m1:m1+r1-oreCost,m2:m2+r2,m3:m3+r3,m4:m4+r4 from t};
+	buildClayRobot::{[blueprint;states]
+		states:delete from states where r1=blueprint`m1r4,r3=blueprint`m3r4;
+		oreCost:blueprint`m1r2;
+		t:select from states where m1>=oreCost,r2<blueprint`m2r3;
+		update r2:r2+1,m1:m1+r1-oreCost,m2:m2+r2,m3:m3+r3,m4:m4+r4 from t};
+	buildObsidianRobot::{[blueprint;states]
+		states:delete from states where r1=blueprint`m1r4,r3=blueprint`m3r4;
+		oreCost:blueprint`m1r3;
+		clayCost:blueprint`m2r3;
+		t:select from states where m2>=clayCost,m1>=oreCost,r3<blueprint`m3r4;
+		update r3:r3+1,m1:m1+r1-oreCost,m2+r2-clayCost,m3:m3+r3,m4:m4+r4 from t};
+	buildGeodeRobot::{[blueprint;states]
+		oreCost:blueprint`m1r4;
+		obsidianCost:blueprint`m3r4;
+		t:select from states where m3>=obsidianCost,m1>=oreCost;
+		update r4:r4+1,m1:m1+r1-oreCost,m2:m2+r2,m3:m3+r3-obsidianCost,m4:m4+r4 from t};
+	step::{[blueprint;minutes;states;minute]
+		newstates:skipBuild[blueprint;states],/(buildOreRobot;buildClayRobot;buildObsidianRobot;buildGeodeRobot).\:(blueprint;states);
+		pruneStates[blueprint;newstates;minutes;minute]};
+	maxGeodes::{[blueprint;minutes]
+		states:step[blueprint;minutes]/[initialStates;1+til minutes];
+		exec max m4 from states};
+	pruneStates::{[blueprint;states;minutes;minute]
+		if[not remainingSteps:minutes-minute;:states];
+		t:distinct states;
+		minGeodes:exec max m4+remainingSteps*r4 from t;
+		if[count f:select from states where minGeodes=m4+remainingSteps*r4,r1=blueprint`m1r4,r3=blueprint`m3r4;:1#f];
+		if[minGeodes>maxExtraGeodes:(remainingSteps*remainingSteps-1)div 2;
+			t:select from t where minGeodes<=maxExtraGeodes+m4+remainingSteps*r4];
+		g:t{update c:count each j from 0!?[x;();(1#`b)!1#y;(1#`j)!enlist(asc;`i)]}/:cols t;
+		b:g{[g;d]
+			i:iasc n:g{[g;v]exec sum c from g where b>=v}'v:value d;
+			first a:{[x;g;v]
+				if[x 0;:x];
+				e:$[(::)~x 1;;inter[;x 1]]exec raze j from g where b>=v;
+				(1=count e;e)}/[(0b;::);g i;v i]}/:t;
+		t where b};
+	(sum(blueprints@'`id)*maxGeodes[;24]each blueprints;prd maxGeodes[;32]each 3#blueprints)}

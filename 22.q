@@ -192,3 +192,17 @@ f19:{
 				(1=count e;e)}/[(0b;::);g i;v i]}/:t;
 		t where b};
 	(sum(blueprints@'`id)*maxGeodes[;24]each blueprints;prd maxGeodes[;32]each 3#blueprints)}
+
+f20:{
+	g:{[a;c]
+		t:flip`val`idx!(a;til n:count a);
+		f:{[t;j]
+			o:t[j;`idx];v:t[j;`val];
+			n:$[v=0;o+v;v>0;(o+v)mod -1+count t;1+(-1+o+v)mod -1+count t];
+			t:$[n=o;t;
+				n>o;update idx:idx-1 from t where idx within(o;n);
+				update idx:idx+1 from t where idx within(n;o)];
+			t[j;`idx]:n;t};
+		b:exec val from r:`idx xasc f/[t;(c*n)#til n];
+		sum r[`val]r[`idx]?((1!r)[0;`idx]+1000 2000 3000)mod n};
+	g'[1 811589153*\:first(enlist"J";",")0:x;1 10]}

@@ -206,3 +206,22 @@ f20:{
 		b:exec val from r:`idx xasc f/[t;(c*n)#til n];
 		sum r[`val]r[`idx]?((1!r)[0;`idx]+1000 2000 3000)mod n};
 	g'[1 811589153*\:first(enlist"J";",")0:x;1 10]}
+
+f21:{
+	b::{if[2=count v:" "vs x;:".p1.",x];if[(v:@[v;0 1 3;".p1.",])[2]~1#"/";v[2]:"div"];" "sv v}each a:read0 x;
+	(::){any 10=type each@[value;;::]each b}/1b;
+	f:{
+		if[2=count v:" "vs x;
+			:enlist$["humn:"~v 0;"::";".p2.",x]];
+		u:@[v;0 1 3;".p2.",];u[0]:-1_u 0;
+		if["root:"~v 0;
+			:(u[1],":",u 3;u[3],":",u 1)];
+		o:u 2;
+		$[o~1#"*";(u[0],":",u[1],"*",u 3;u[1],":",u[0]," div ",u 3;u[3],":",u[0]," div ",u 1);
+			o~1#"+";(u[0],":",u[1],"+",u 3;u[1],":",u[0],"-",u 3;u[3],":",u[0],"-",u 1);
+			o~1#"-";(u[0],":",u[1],"-",u 3;u[1],":",u[0],"+",u 3;u[3],":",u[1],"-",u 0);
+			o~1#"/";(u[0],":",u[1]," div ",u 3;u[1],":",u[0],"*",u 3;u[3],":",u[1]," div ",u 0);
+			'"op"]};
+	c::raze f each a;
+	(::){@[value;;::]each c;()~key`.p2.humn}/1b;
+	(.p1.root;.p2.humn)}

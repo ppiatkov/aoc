@@ -224,4 +224,6 @@ f21:{
 			'"op"]};
 	c::raze f each a;
 	(::){@[value;;::]each c;()~key`.p2.humn}/1b;
-	(.p1.root;.p2.humn)}
+	r:(.p1.root;.p2.humn);
+	.p1:.p2:1#.q;
+	r}

@@ -227,3 +227,25 @@ f21:{
 	r:(.p1.root;.p2.humn);
 	.p1:.p2:1#.q;
 	r}
+
+f23:{
+	xy2p::{[N;x;y]y+N+2*N*x+N}N:1000000000;
+	p2xy::{[N;p](p div 2*N;p mod 2*N)-N}N;
+	p0:xy2p . b:flip raze til[count a],/:'where each"#"=a:read0 x;
+	chk::{[p;dir]
+		x:first xy:p2xy p;y:last xy;
+		testp:xy2p .'$[
+			dir=`N;(x-1;)each y+/:-1 0 1;
+			dir=`S;(x+1;)each y+/:-1 0 1;
+			dir=`W;(;y-1)each x+/:-1 0 1;
+			dir=`E;(;y+1)each x+/:-1 0 1;
+			'"lost"];
+		(not any testp in p;testp 1)};
+	round:{[r]
+		b:chk[p:r 0]each dirs:r 1;
+		pr:{[p;b] @[p;w;:;b[1]w:where b 0]}/[p;reverse b];
+		pr[w]:p w:where all b[;0];
+		w:raze g where 1<count each g:group pr;
+		(@[pr;w;:;p w];1_dirs,1#dirs;1+r 2;any pr<>p)};
+	s:(p0;`N`S`W`E;0;1b);
+	({(prd{1+max[x]-min x}'[x])-count x 0}p2xy round/[10;s]0;round/[last;s]2)}

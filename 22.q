@@ -249,3 +249,24 @@ f23:{
 		(@[pr;w;:;p w];1_dirs,1#dirs;1+r 2;any pr<>p)};
 	s:(p0;`N`S`W`E;0;1b);
 	({(prd{1+max[x]-min x}'[x])-count x 0}p2xy round/[10;s]0;round/[last;s]2)}
+
+f24:{
+	d:-2+(xs::count a 0)*ys::count a:read0 x;
+	s:`w`r`d`l`u!value"#>v<^"#g:group b:raze a;
+	m:(!/)flip(
+		(`r;{@[p;where(xs-1)=(p:x+1)mod xs;-[;xs-2]]});
+		(`d;{@[p;where(ys-1)=(p:x+xs)div xs;-[;xs*ys-2]]});
+		(`l;{@[p;where 0=(p:x-1)mod xs;+[;xs-2]]});
+		(`u;{@[p;where 0=(p:x-xs)div xs;+[;xs*ys-2]]}));
+	e::@[;;]/[;k;m k:1_key s];
+	f::{p where 0<p:distinct x,(x+1),(x-1),(x+xs),x-xs};
+	h::{(not x in r;p;r@:where not any(r:f y 2)in/:p:e y 1;1+y 3)};
+	o:{@[;1 3]h[z]/[first;(1b;x 0;y;x 1)]};
+	(o\[(s;0);(1;d;1);(d;1;d)])[0 2;1]}
+
+f25:{
+	decode:{w:where'[x=/:"-="];(-/)5 sv'("J"$'@[x;w;:;"0"];@[count[x]#0;w;:;1 2])};
+	encode:{
+		b:{$[count w:where 2<p:reverse 5 vs x 1;x+prd[f#5]*5-p f:first w;x]}/[(0;x)];
+		{reverse{@[y;where'[x=/:"12"];:;"-="]}.{raze string reverse x}'[5 vs'x]}b};
+	encode sum decode each read0 x}

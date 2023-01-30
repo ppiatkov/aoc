@@ -78,6 +78,23 @@ f14:{
 		}[s:z 2]/[first;(1b;(x;0))];$[y=r[1;1];(0b;1+z 1;s);(1b;1+z 1;.[s;r 1;:;1b])]}p;
 	-1 0+(1b;0;s){y/[first;x]1}/:f@/:(a-1;0)}
 
+f15:{
+	t:{`SX`SY`BX`BY!"J"$@[2_'(" "vs x)2 3 8 9;0 1 2;-1_]}each read0 x;
+	t:update d:sum abs(BX-SX;BY-SY)from t;
+	a:{[t]
+		Y:2000000;
+		r:update h:abs SY-Y from t;
+		r:update start:h+SX-d,end:1+SX+d-h from r;
+		r:select start,end from r where start<=end;
+		m:{flip c!r[j]@/:(0,-1_1+w;w:where 0=sums((2*count x)#1 -1)j:iasc r:raze flip x c:cols x)};
+		(exec sum end-start from m r)-exec count distinct BX from t where BY=Y};
+	b:{[t]
+		s:update xpyt:SX+SY+d+1,xpyb:SX+SY-d+1,ymxt:(SY-SX)+d+1,ymxb:(SY-SX)-d+1 from t;
+		xpy:first s[`xpyt]where count[s]>s[`xpyb]?s`xpyt;
+		ymx:first s[`ymxt]where count[s]>s[`ymxb]?s`ymxt;
+		sum 4000000 1*(xpy-ymx;xpy+ymx)div 2};
+	(a;b)@\:t}
+
 f17:{
 	push::?[">"=first read0 x;1;-1];
 	rocks::(0 1 2 3;1 9 10 11 19;0 1 2 11 20;0 9 18 27;0 1 9 10)+39;

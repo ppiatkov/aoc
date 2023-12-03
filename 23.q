@@ -19,3 +19,8 @@ f03:{
 	e:where 2=count each group raze f@'where each"*"=t f;
 	a2:sum prd each p where each flip e in/:f;
 	(a1;a2)}
+
+f04:{
+	n:count t:read0 x;
+	m:{sum(in)."J"$0N 3#/:@[" | "vs x;0;last": "vs]}each t; / Number of matches in each card
+	(sum prd each(0<m)*(m-1)#'2;sum{@[x;1+z+til y;x[z]+]}/[n#1;m;til n])}

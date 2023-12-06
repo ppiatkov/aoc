@@ -38,5 +38,11 @@ f05:{
 		update d1:s1+sh,d2:s2+sh from a}[y]each x};
 	t1:([]s1:s;s2:s+1;d1:s;d2:s+1;sh:0); / Seed ranges for part 1
 	t2:select s1,s2,d1:s1,d2:s2,sh:0 from update s2:s1+l from flip`s1`l!flip 0N 2#s; / Seed ranges for part 2
-	m{exec min d1 from(x/)enlist[z],y}[c]/:(t1;t2)
-	}
+	m{exec min d1 from(x/)enlist[z],y}[c]/:(t1;t2)}
+
+p06:{
+	t:read0 x;
+	p1:{"J"$last each 0N 2#where[differ" "=a]_a:last":"vs x}each t;
+	p2:{"J"$last[":"vs x]except" "}each t;
+	f:{-1+(-).(ceiling;floor)@'a+/:1 -1*\:sqrt((a*a:x[0]%2)-x 1)};
+	(prd f p1;f p2)}

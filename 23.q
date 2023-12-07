@@ -40,9 +40,19 @@ f05:{
 	t2:select s1,s2,d1:s1,d2:s2,sh:0 from update s2:s1+l from flip`s1`l!flip 0N 2#s; / Seed ranges for part 2
 	m{exec min d1 from(x/)enlist[z],y}[c]/:(t1;t2)}
 
-p06:{
+f06:{
 	t:read0 x;
 	p1:{"J"$last each 0N 2#where[differ" "=a]_a:last":"vs x}each t;
 	p2:{"J"$last[":"vs x]except" "}each t;
 	f:{-1+(-).(ceiling;floor)@'a+/:1 -1*\:sqrt((a*a:x[0]%2)-x 1)};
 	(prd f p1;f p2)}
+
+f07:{
+	t:flip`h`b!flip{@[" "vs x;1;"J"$]}each read0 x; / Hands and their bids
+	c:("23456789TJQKA";"J23456789TQKA"); / Cards sorted by their strengths in parts 1 and 2
+	s:{x desc value count each group y}(1 1 1 1 1;2 1 1 1;2 2 1;3 1 1;3 2;4 1;1#5)!til 7; / Hand strength
+	f:{(cross/)?["J"=y;count[y]#1#x;(),/:y]}c; / Generates hands with all J substitutions
+	w:update h:t[`h]n from ungroup enlist[`h]_update n:i,m:f each h from t; / Original and modified hands
+	p1:update r:s each h,u:13 sv'c[0]?/:h from t; / Evaluate type and strength within type for part 1
+	p2:select by n from`r`u xasc update r:s each m,u:13 sv'c[1]?/:h from w; / Same for part 2
+	{exec sum b*i+1 from`r`u xasc x}each(p1;p2)}

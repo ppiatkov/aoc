@@ -77,5 +77,5 @@ f10:{
 	g:{[v;c;n;x;a] (v .\:(x 1;a 1))*(c@'x 1)+x[0]mod n}[v;c;n]; / Integrand for the closed contour
 	p[s]:d[t:(2+u 0)mod 4;last u:where 4>d?'p m@'s:p?"S"]; / Start position, direction and connector
 	f:{[p;m;d;x](m[a]b;a:d[x 1]?p b:x 0)}[p;m;d]; / Iterator for (input direction;position) pair
-	h:last{[f;r;g;x]a:f 2#x;a,(1+x 2;r[x 1;a 1]+x 3;g[x;a]+x 4)}[f;r;g]\[{(0=y 2)|x<>y 0}s;(s;t;0;0;0)]; / Calculate area using Stokes' theorem
+	h:{[f;r;g;x]a:f 2#x;a,(1+x 2;r[x 1;a 1]+x 3;g[x;a]+x 4)}[f;r;g]/[{(0=y 2)|x<>y 0}s;(s;t;0;0;0)]; / Calculate area using Stokes' theorem
 	(h[2]div 2;abs h[4]0>h 3)}

@@ -66,3 +66,16 @@ f08:{
 	(a1;a2)}
 
 f09:{sum{last each(sums;({y-x}\))@'(last;first)@/:\:reverse any(1_deltas@)\"J"$" "vs x}each read0 x}
+
+f10:{
+	p:raze -1 rotate o,(2;n:count first o:".",/:read0[x],\:".")#"."; / Add margins and flatten
+	m:(+[;1];-[;n];-[;1];+[;n]); / Move right/up/left/down
+	d:("-J 7";"F|7 ";" L-F";"L J|"); / In->out connectors
+	r:(0 1 0N -1;-1 0 1 0N;0N -1 0 1;1 0N -1 0); / Rotations
+	c:(1001b;1100b); / Counter-clockwise/clockwise contour coordinate corrections
+	v:((0 0 0 -1;1 1 0 0;0 1 0 0;0 0 -1 -1);(0 1 0 0;0 1 1 0;0 0 0 -1;-1 0 0 -1)); / Vector coefficients for two contour orientations
+	g:{[v;c;n;x;a] (v .\:(x 1;a 1))*(c@'x 1)+x[0]mod n}[v;c;n]; / Integrand for the closed contour
+	p[s]:d[t:(2+u 0)mod 4;last u:where 4>d?'p m@'s:p?"S"]; / Start position, direction and connector
+	f:{[p;m;d;x](m[a]b;a:d[x 1]?p b:x 0)}[p;m;d]; / Iterator for (input direction;position) pair
+	h:last{[f;r;g;x]a:f 2#x;a,(1+x 2;r[x 1;a 1]+x 3;g[x;a]+x 4)}[f;r;g]\[{(0=y 2)|x<>y 0}s;(s;t;0;0;0)]; / Calculate area using Stokes' theorem
+	(h[2]div 2;abs h[4]0>h 3)}

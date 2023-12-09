@@ -56,3 +56,13 @@ f07:{
 	p1:update r:s each h,u:13 sv'c[0]?/:h from t; / Evaluate type and strength within type for part 1
 	p2:select by n from`r`u xasc update r:s each m,u:13 sv'c[1]?/:h from w; / Same for part 2
 	{exec sum b*i+1 from`r`u xasc x}each(p1;p2)}
+
+f08:{
+	d:"LR"?first t:read0 x; / Directions
+	m:{(`u#first each x)!(1_'x)}`${(3#x;x 7 8 9;x 12 13 14)}each(2_t); / Node map
+	a1:last{(x[1;y 0]d v mod count d:x 0;1+v:y 1)}[(d;m)]/['[`ZZZ<>;first];`AAA,0]; / Part 1 answer
+	k@:where each"AZ"=\:string[k:key m][;2]; / Start and end nodes for part 2
+	a2:count[d]*prd{last({({x[y]z}[x]/[z 0;y];1+z 1)}. x)/[not any in[;y]first@;(z;0)]}[(m;d);k 1]each k 0; / Magic formula for magic input
+	(a1;a2)}
+
+f09:{sum{last each(sums;({y-x}\))@'(last;first)@/:\:reverse any(1_deltas@)\"J"$" "vs x}each read0 x}

@@ -79,3 +79,12 @@ f10:{
 	f:{[p;m;d;x](m[a]b;a:d[x 1]?p b:x 0)}[p;m;d]; / Iterator for (input direction;position) pair
 	h:{[f;r;g;x]a:f 2#x;a,(1+x 2;r[x 1;a 1]+x 3;g[x;a]+x 4)}[f;r;g]/[{(0=y 2)|x<>y 0}s;(s;t;0;0;0)]; / Calculate area using Stokes' theorem
 	(h[2]div 2;abs h[4]0>h 3)}
+
+f11:{
+	f:{[t;m]
+		p:raze(til[count t]+sums(m-1)*all'["."=t]),/:'(til[count t 0]+sums(m-1)*all"."=t)where'["#"=t];
+		n:exec 1+max y1 from r:flip`x1`y1`x2`y2!flip p cross p;
+		r:update r1:y1+n*x1,r2:y2+n*x2 from r;
+		r:select from r where r2>r1;
+		exec sum(abs x1-x2)+abs y1-y2 from r};
+	read0[x]f/:2 1000000}

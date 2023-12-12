@@ -88,3 +88,18 @@ f11:{
 		r:select from r where r2>r1;
 		exec sum(abs x1-x2)+abs y1-y2 from r};
 	read0[x]f/:2 1000000}
+
+f12:{
+	f:{
+		a:(a;"?"sv 5#enlist a:first b:" "vs x);
+		b:(b;raze 5#enlist b:"J"$","vs last b);
+		g:{[a;b;d;j]
+			h:{[a;b;j;c]
+				o:c+til$[e:j=-1+n:count b;0;neg count[l]+sum l:(j+1)_b]+(m:count a)+1-c+k:b j; / Possible offsets
+				o:(1+a[-1_o]?"#")#o; / Must not have any new "#" before this group
+				o@:where$[e;o>m-1+k+reverse[a]?"#";"#"<>a o+k]; / Must not have "#"/"#"s after
+				o@:where not any each"."=a o+\:til k; / Must not have any "."s within this group
+				$[e;(1#m-k)!1#count o;count each group 1+o+k]};
+			sum value[d]*/:'h[a;b;j]each key d}; / Group by accumulated offset
+		{first value x[y;z]/[(1#0)!1#1;til count z]}'[g;a;b]};
+	sum f each read0 x}

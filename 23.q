@@ -103,3 +103,9 @@ f12:{
 			sum value[d]*/:'h[a;b;j]each key d}; / Group number of arrangements by accumulated offset
 		{first value x[y;z]/[(1#0)!1#1;til count z]}'[g;a;b]};
 	sum f each read0 x}
+
+f13:{
+	p:1_'where[0=count'[o]]_o:enlist[""],read0 x;
+	f:{1+where y{x=sum sum(<>/)(min count'[a])#'a:(reverse z#y;z _y)}[x]/:1_til count y};
+	(sum')(sum'')(raze'')100 1*'/:0 1 f/:/:\:(p;flip each p)
+	}

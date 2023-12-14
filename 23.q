@@ -109,3 +109,13 @@ f13:{
 	f:{1+where y{x=sum sum(<>/)(min count'[a])#'a:(reverse z#y;z _y)}[x]/:1_til count y};
 	(sum')(sum'')(raze'')100 1*'/:0 1 f/:/:\:(p;flip each p)
 	}
+
+f14:{
+	p:flip read0 x;
+	t:({"#"sv desc each"#"vs x}'); / Tilt
+	l:{sum(1+til count a)*reverse a:sum"O"=x}; / Load
+	c:(reverse flip t@)/[4;]; / Cycle
+	f:{x{all all 1_(=':)3 0N#neg[3*y]#x}/:2_til count[x]div 3}; / Finds periodic pattern
+	r:first{(z[0],x a;a:y z 1)}[l;c]/[not any f first@;(1#0;p)];
+	o:1000000000 mod m:2+f[r]?1b;
+	(l t p;r count[r]-1+(mod[count[r]-1;m]-o)mod m)}

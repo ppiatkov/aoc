@@ -115,7 +115,7 @@ f14:{
 	t:({"#"sv desc each"#"vs x}'); / Tilt
 	l:{sum(1+til count a)*reverse a:sum"O"=x}; / Load
 	c:(reverse flip t@)/[4;]; / Cycle
-	f:{x{all all 1_(=':)3 0N#neg[3*y]#x}/:2_til count[x]div 3}; / Finds periodic pattern
-	r:first{(z[0],x a;a:y z 1)}[l;c]/[not any f first@;(1#0;p)];
-	o:1000000000 mod m:2+f[r]?1b;
+	f:{$[null w:last where -1_a=last a:x 0;1b;not b[w]~last b:x 1]}; / Finds periodic pattern
+	r:first{(z[0],x a;b,enlist a:y last b:z 1)}[l;c]/[f;(1#0;enlist p)];
+	o:1000000000 mod m:neg(-). -2#where r=last r;
 	(l t p;r count[r]-1+(mod[count[r]-1;m]-o)mod m)}

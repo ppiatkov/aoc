@@ -119,3 +119,11 @@ f14:{
 	r:first{(z[0],x a;b,enlist a:y last b:z 1)}[l;c]/[f;(1#0;enlist p)];
 	o:1000000000 mod m:neg(-). -2#where r=last r;
 	(l t p;r count[r]-1+(mod[count[r]-1;m]-o)mod m)}
+
+f15:{
+	h:{(17*x+"j"$y)mod 256}/[0;];
+	a1:sum h each o:","vs first t:read0 x;
+	f:{l:`$s:$[d:"-"=last z;-1_z;first a:"="vs z];@[y;x s;$[d;_[;l];,[;(1#l)!1#"J"$a 1]]]}h;
+	r:f/[256#enlist(0#`)!0#0;o];
+	a2:sum(1+til count r)*{sum(1+til count x)*x}each r;
+	(a1;a2)}

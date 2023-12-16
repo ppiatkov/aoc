@@ -143,3 +143,32 @@ f16:{
 	f:{exec count distinct p from first x/[count last@;2#enlist([]p:1#y;d:z)]}s; / Repeats until there are no new positions/directions
 	e:raze flip each((1+v;0);(u+n*k-2;1);(-2+n+v:1_n*til -1+k:count t;2);(n+u:1_til n-1;3)); / Edges
 	(first;max)@\:f .'e}
+
+f17:{
+	n:count first p:0N,/:(-48+"j"$read0 x),\:0N;
+	k:count r:e,p,e:enlist n#0N;
+	o:raze r;
+	m:(1;neg n;-1;n);
+	st:([]p:n+1;d:0 3;l:0;h:0);
+	v:update h:0W from(delete from(update p:i from([]l:o))where null l);
+	v:raze v{y;update d:y from x}/:til 4;
+	f:{[o;m;lmin;lmax;x]
+		s1:select p:p+m@/:d,d,l:l+1,h from(s:x 0)where l<lmax;
+		sx:select from s where l>=lmin;
+		s2:select p:p+m@/:d,d,l:1,h from update d:mod[d+1;4]from sx;
+		s3:select p:p+m@/:d,d,l:1,h from update d:mod[d-1;4]from sx;
+		a:select distinct from(update h:h+o p from s1,s2,s3)where not null h;
+		b:select min h by p,d,l from a;
+		b:3!(0!b)where(value[b]`h)<x[1][key[b]]`h;
+		(b;x[1]upsert b)}[o;m];
+	w:{[f;st;n;k;v;lmin;lmax]
+		a:`p`d`l xkey raze v{y;update l:y from x}/:1+til lmax;
+		b:f[lmin;lmax]/[count first@;(st;a)];
+		exec min h from last[b]where p=-2+n*k-1}[f;st;n;k;v];
+	(w[0;3];w[4;10])}
+
+f18:{
+	o:{("RDLU"?x 0;"J"$a 1;"J"$b 5;256 sv"X"$'0N 2#"0",-1_b:-1_2_last a:" "vs x)}each read0 x;
+	f:{(x[0]+(s:y 1)*(1 0;0 1;-1 0;0 -1)d;s+x 1;x[2]+(s:y 1)*x[0;0]*0 1 0 -1 d:y 0)}; / Stokes' theorem
+	{1+div[x 1;2]+abs x 2}each f/[(0 0;0;0);]each 2 -2#'\:o}
+

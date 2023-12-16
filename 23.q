@@ -127,3 +127,19 @@ f15:{
 	r:f/[256#enlist(0#`)!0#0;o];
 	a2:sum(1+til count r)*{sum(1+til count x)*x}each r;
 	(a1;a2)}
+
+f16:{
+	o:raze t:e,t,e:enlist(n:count first t:" ",/:read0[x],\:" ")#""; / Add margins and flatten
+	m:(1;neg n;-1;n); / Shift right/up/left/down
+	g:(!/)flip( / Next direction
+		(".";(1#0;1#1;1#2;1#3));
+		("/";(1#1;1#0;1#3;1#2));
+		("\\";(1#3;1#2;1#1;1#0));
+		("-";(1#0;0 2;1#2;0 2));
+		("|";(1 3;1#1;1 3;1#3)));
+	s:{[o;m;g;x] / Finds next positions/directions and adds to visited list
+		a:update p:p+m@/:d from ungroup select p,g[o p]@'d from x 1;
+		(union;except).\:(select distinct from a where" "<>o p;x 0)}[o;m;g];
+	f:{exec count distinct p from first x/[count last@;2#enlist([]p:1#y;d:z)]}s; / Repeats until there are no new positions/directions
+	e:raze flip each((1+v;0);(u+n*k-2;1);(-2+n+v:1_n*til -1+k:count t;2);(n+u:1_til n-1;3)); / Edges
+	(first;max)@\:f .'e}

@@ -169,6 +169,6 @@ f17:{
 
 f18:{
 	o:{("RDLU"?x 0;"J"$a 1;"J"$b 5;256 sv"X"$'0N 2#"0",-1_b:-1_2_last a:" "vs x)}each read0 x;
-	f:{(x[0]+(s:y 1)*(1 0;0 1;-1 0;0 -1)d;s+x 1;x[2]+(s:y 1)*x[0;0]*0 1 0 -1 d:y 0)}; / Stokes' theorem
+	f:{(x[0]+s*(1 0;0 1;-1 0;0 -1)d;s+x 1;x[2]+(s:y 1)*x[0;0]*0 1 0 -1 d:y 0)}; / Stokes' theorem
 	{1+div[x 1;2]+abs x 2}each f/[(0 0;0;0);]each 2 -2#'\:o}
 

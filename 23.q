@@ -172,3 +172,10 @@ f18:{
 	f:{(x[0]+s*(1 0;0 1;-1 0;0 -1)d;s+x 1;x[2]+(s:y 1)*x[0;0]*0 1 0 -1 d:y 0)}; / Stokes' theorem
 	{1+div[x 1;2]+abs x 2}each f/[(0 0;0;0);]each 2 -2#'\:o}
 
+f19:{
+	o:(0,where 0=count each t)_t:read0 x;
+	p:{(!/)"SJ"$'flip"="vs'","vs -1_1_x}each 1_o 1;
+	f:(!/)flip{a:(0,x?"{")_x;(`$a 0;flip{c:"J"$2_b:first a:":"vs x;(@[;`$b 0;]/:[;(&;|)[d,1-d]@'c+d:">"=b 1];`$last a)}'[-1_b],e(e:enlist;`$last b:","vs -1_1_a 1))}'[o 0];
+	r:enlist`x`m`a`s`w!(4#enlist 1 4001),`in;
+	g:(1#`w)_{a:raze x{e:enlist y;$[`A=w:y`w;e;{(-1_x),y last x}/[(1#`w)_e;b 0],'([]w:last b:x w)]}/:y;select from a where w<>`R}[f]/[r];
+	(sum sum p where(any')(all'')p within'/:\:0 -1+/:/:g;sum(prd')(-/'')g)}

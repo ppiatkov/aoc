@@ -197,3 +197,17 @@ f20:{
 	u:first exec nm from s where`rx in/:tgt;
 	a2:prd k{first y[z]/[{not x 2};x]}[j]/:exec nm from s where u in/:tgt;
 	(a1;a2)}
+
+f21:{
+	if[(0=n mod 2)|count[first p]<>n:count p:read0 x;'"nyi"];
+	o:(0#;::)@\:s:enlist(a w;w:(n>a:p?'"S")?1b);
+	f:{distinct raze x+\:/:(0 1;0 -1;1 0;-1 0)};
+	g:{z where"#"<>x ./:z mod y}[p;n];
+	e:{y where all each y within(0;x)}n-1;
+	h:{(a;x[a:y 1]except y 0)};
+	a1:sum first each 0N 2#(count last@)each h[g e f@]\[64;o];
+	r:{(c;-2#2 deltas/c:z[0],enlist b;-2#b:-1_raze z[2]+/:sums 0N 2#(count last@)'[a];last a:x\[y;z 3])}[h[g f@];n];
+	j:r/[{$[2>count x 0;1b;not[(~/)x 1]]};(();();0 0;o)];
+	c:{x[1],(x[2]-x 0)div 2}[-3#j[0;;k]],j[1;1;k:(N:26501365)mod n]div 2;
+	a2:sum c*1,a,a*a:(N div n)-count[j 0]-2;
+	(a1;a2)}

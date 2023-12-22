@@ -179,3 +179,21 @@ f19:{
 	r:enlist`x`m`a`s`w!(4#enlist 1 4001),`in;
 	g:(1#`w)_{a:raze x{e:enlist y;$[`A=w:y`w;e;{(-1_x),y last x}/[(1#`w)_e;b 0],'([]w:last b:x w)]}/:y;select from a where w<>`R}[f]/[r];
 	(sum sum p where(any')(all'')p within'/:\:0 -1+/:/:g;sum(prd')(-/'')g)}
+
+
+f20:{
+	p:flip`nm`typ`tgt!flip{a:" -> "vs x;(`$(b in"%&")_a 0;$["%"=b:first a 0;`f;"&"=b;`c;`b];`$", "vs a 1)}'[read0 x];
+	s:update on:0b,src:count[i]#enlist 0#` from p;
+	s:s lj select src:nm by nm:tgt from ungroup[p]where tgt in exec nm from p where typ=`c;
+	s:1!update mem:count'[src]#'0b from s;
+	g:{[s;n;pl;c] / Returns (state;targets;c received high pulse;pulses)
+		if[null t:(d:s n)`typ;:(s;0#`;0b;0#0b)];
+		o:$[`f=t;[if[pl;:(s;0#`;0b;0#0b)];s[n;`on]:not d`on];`c=t;not all d`mem;pl];
+		(update mem:{[mem;src;s;v]@[mem;src?s;:;v]}'[mem;src;n;o]from s where typ=`c,nm in u;u;o&n=c;count[u:d`tgt]#o)};
+	f:{[g;c;x;y;z] a:g[x 0;y;z;c];(a 0;x[1],a 1;x[2]|a 2;x[3],a 3)}g;
+	h:{a:x[y]/[(z 0;0#`;z 2;0#0b);z 1;z 3];if[0=count a 1;:z];a,enlist z[4]+0^count'[group a 3]01b}f;
+	k:{enlist[1+z 0],@[;0 2 4]x[y]/[(z 1;1#`broadcaster;0b;1#0b;1 0+z 3)]}h;
+	a1:prd last k[`]/[1000;j:(0;s;0b;0 0)];
+	u:first exec nm from s where`rx in/:tgt;
+	a2:prd k{first y[z]/[{not x 2};x]}[j]/:exec nm from s where u in/:tgt;
+	(a1;a2)}

@@ -180,7 +180,6 @@ f19:{
 	g:(1#`w)_{a:raze x{e:enlist y;$[`A=w:y`w;e;{(-1_x),y last x}/[(1#`w)_e;b 0],'([]w:last b:x w)]}/:y;select from a where w<>`R}[f]/[r];
 	(sum sum p where(any')(all'')p within'/:\:0 -1+/:/:g;sum(prd')(-/'')g)}
 
-
 f20:{
 	p:flip`nm`typ`tgt!flip{a:" -> "vs x;(`$(b in"%&")_a 0;$["%"=b:first a 0;`f;"&"=b;`c;`b];`$", "vs a 1)}'[read0 x];
 	s:update on:0b,src:count[i]#enlist 0#` from p;
@@ -211,3 +210,19 @@ f21:{
 	c:{x[1],(x[2]-x 0)div 2}[-3#j[0;;k]],j[1;1;k:(N:26501365)mod n]div 2;
 	a2:sum c*1,a,a*a:(N div n)-count[j 0]-2;
 	(a1;a2)}
+
+f22:{
+	p:flip`x1`y1`z1`x2`y2`z2!flip{raze"J"$","vs'"~"vs x}each read0 x;
+	p:update b:0b from p; / Add "bottom" flag
+	p:`z1 xasc enlist[cols[p]!(min p`x1;min p`y1;0;max p`x2;max p`y2;0;1b)],p;
+	f:{
+		d:x y;
+		s:select from x where x2>=d`x1,x1<=d`x2,y2>=d`y1,y1<=d`y2,z2<d`z2;
+		x[y;`z1`z2]-:d[`z1]-1+m:0^exec max z2 from s;
+		if[any exec b from s where z2=m;x[y;`b]:1b];
+		x};
+	g:{x/[y;exec i from y where not b]}f;
+	r:update b:i=0 from g/[p];
+	c:{a[`z1]=(x/[a:y _z])`z1}[g;r]each 1_til count r;
+	(sum all each c;sum sum each not c)}
+

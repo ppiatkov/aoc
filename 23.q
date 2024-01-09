@@ -226,3 +226,17 @@ f22:{
 	c:{a[`z1]=(x/[a:y _z])`z1}[g;r]each 1_til count r;
 	(sum all each c;sum sum each not c)}
 
+f23:{
+	o:@[raze t;1+m:count first t:read0 x;:;"v"];
+	n:w where 2<>sum o[(w:where o=".")+/:v:(1;neg m;-1;m)]in".",r:">^<v"; / Nodes
+	d:raze n,/:'where each r=/:o n+\:v; / Directed graph
+	f:{(1+z 0;a;(("#"<>x[b])&z[1]<>b:y+a:z[1]+y z 2)?1b)}[o;v];
+	d:flip`s`e`c!flip d[;0],'{@[;1 0]x/[{(0=y 0)|not y[1]in x}y;0,z]}[f;n]each d;
+	u:d,update s:e,e:s from d; / Undirected graph
+	g:{[n;d;x]
+		a:select s:e,h:(h,'s),l:l+c from ej[`s;x 0;d];
+		a:delete from a where s in'h;
+		b:last[n]=a`s;
+		(a where not b;x[1]|exec max l from a where b)}n;
+	g{last x[y]/[{count x 0};(([]s:1;h:enlist 0#0;l:0);0)]}/:(d;u)}
+

@@ -240,3 +240,13 @@ f23:{
 		(a where not b;x[1]|exec max l from a where b)}n;
 	g{last x[y]/[{count x 0};(([]s:1;h:enlist 0#0;l:0);0)]}/:(d;u)}
 
+f24:{ / (p_a)_i + (v_a)_i*t_a = P_i +V_i*t_a  =>  P_i*(v_a)_j - V_i*(p_a)_j - (p_a)_i*(v_a)_j - (i<->j) - (a->b) = 0,  i,j=x,y,z, a,b=1,...,N
+	o:"f"${`px`py`pz`vx`vy`vz!"J"$'raze[","vs'"@"vs x]}each read0 x;
+	g:{inv[1 -1*/:x@\:`vy`vx]mmu{prd[x`px`vy]-prd[x`py`vx]}each x};
+	f:{$[all within[s:x"f"$a:(y;z);200000000000000 400000000000000];all s{$[0<y`vx;>;<].(x 0;y`px)}/:a;0b]}g;
+	q:{[o;x]
+		a:1 -1 -1 1*/:(c:2*til 4){x[y;z]-x[y+1;z]}[o]/:\:x;
+		b:sum each 1 -1*/:c{prd[x[y;z]]-prd[x[y+1;z]]}[o]/:\:x@/:(3 0;1 2);
+		"j"$inv[a]mmu b}o;
+	(sum raze{y[z]x/:(z+1)_y}[f;o]each til count o;sum(2#q`vy`vx`py`px),q[`vz`vx`pz`px]1)}
+

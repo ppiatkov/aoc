@@ -250,3 +250,20 @@ f24:{ / (p_a)_i + (v_a)_i*t_a = P_i +V_i*t_a  =>  P_i*(v_a)_j - V_i*(p_a)_j - (p
 		"j"$inv[a]mmu b}o;
 	(sum raze{y[z]x/:(z+1)_y}[f;o]each til count o;sum(2#q`vy`vx`py`px),q[`vz`vx`pz`px]1)}
 
+f25:{
+	links:select l:`u#i,a,b from ungroup flip`a`b!flip{`$(a 0;" "vs last a:": "vs x)}each read0 x;
+	nodes:exec distinct s from nb:select s:a,d:b,l from links,update b:a,a:b from links;
+	conn:{d:exec d from x where s in y 1;distinct each(y[0]union d;d except y 0)};
+	np:select n1:nodes n1,n2:nodes n2 from flip[`n1`n2!flip a cross a:til count nodes]where n1>n2; / Node pairs
+	np:update d:0N from np; / Pairwise distances between nodes
+	f:{[x;np;src] dst:1_last each a:x\[(1#src;1#src)];{[src;np;dst;x] np:update d:x from np where n1=src,n2 in dst;update d:x from np where n2=src,n1 in dst}[src]/[np;dst;1+til count dst]}conn nb;
+	np:f/[np;nodes];
+	m:first`d xdesc np;
+	g:{[c;m;x;y]raze last each c\[x;2#enlist enlist m y]}[conn nb;m];
+	h:{x[y;`n1]inter x[z;`n2]}g;
+	sz:{[nb;c;x] / Count of connected part after removing links x
+		r:delete from nb where l in x;
+		count distinct first c[r]/[(0#`;1#r[0;`s])]}[nb;conn];
+	j:first{(a;x . 2#a:1+y 0)}[h]/[{0=count last x};(0;0#`)];
+	o:{x where{(x>y)&y>z}.'x}(cross/)3#enlist exec distinct l from nb where s in h[j;j];
+	a*n-a:sz o('[(n:count distinct raze links`a`b)=;sz])'[o]?0b}

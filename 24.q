@@ -11,3 +11,16 @@ f02:{
 			0b]; / Can't fix more than two unsafe deltas
 		(a;b)};
 	sum f each"J"$" "vs'read0 x}
+
+f03:{
+	t:raze read0 x;
+	f:{ / Finds and sums multiplications
+		a:4_'ss[x;"mul("]_x;
+		a:(1+a?'")")#'a;
+		a:-1_'a where")"=last each a;
+		a@:where 1=sum each a=",";
+		a@:where all each a in",",.Q.n;
+		sum prd each"J"$","vs'a};
+	r:(0,asc ss[t;n:"don't()"],ss[t;"do()"])_t;
+	r@:where not r like n,"*";
+	(f t;sum f each enlist[r 0],4_'1_r)}

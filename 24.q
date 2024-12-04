@@ -24,3 +24,14 @@ f03:{
 	r:(0,asc ss[t;n:"don't()"],ss[t;"do()"])_t;
 	r@:where not r like n,"*";
 	(f t;sum f each enlist[r 0],4_'1_r)}
+
+f04:{
+	n:count t:read0 x;
+	m:{[e;x;y;t] / Move
+		v:{[e;y;t]a:y _t;b:y#e;$[y>0;a,b;b,a]}e; / Vertical shift
+		h:{[e;x;t]a:neg[x]_'t;b:x#" ";$[x>0;b,/:a;a,\:b]}e; / Horizontal shift
+		h[x]v[y]t}enlist n#" ";
+	s:{[m;t;w;d]flip[raze each(m .'d)@\:t]in(w;reverse w)}[m;t];
+	a1:sum sum"XMAS"s/:(f,'f;f,'neg f;f,'0;0,'f:til 4);
+	a2:sum all"MAS"s/:(r,'r;r,'reverse r:-1_f);
+	(a1;a2)}

@@ -35,3 +35,13 @@ f04:{
 	a1:sum sum"XMAS"s/:(f,'f;f,'neg f;f,'0;0,'f:til 4);
 	a2:sum all"MAS"s/:(r,'r;r,'reverse r:-1_f);
 	(a1;a2)}
+
+f05:{
+	(a;b):"J"$"|,"vs/:'0 1_'(0,(0=count each t)?1b)_t:read0 x;
+	m:count'[b]div 2;
+	d:distinct raze a;
+	e:a where@'(all'')(d in/:b)@\:d?a;
+	a1:sum b[w]@'m w:where c:all each(<).''b?'e;
+	g:b[n]{{y{$[(>/)j:x?y;x;@[x;j;:;x reverse j]]}/x}[y]/[x]}'e n:where not c;
+	a2:sum g@'m n;
+	(a1;a2)}

@@ -45,3 +45,20 @@ f05:{
 	g:b[n]{{y{$[(>/)j:x?y;x;@[x;j;:;x reverse j]]}/x}[y]/[x]}'e n:where not c;
 	a2:sum g@'m n;
 	(a1;a2)}
+
+f06:{
+	n:2+count first i:read0 x;
+	r:raze r,(" ",/:i,\:" "),r:enlist n#" ";
+	m:(1;neg n;-1;n);
+	d:">^<v";
+	j@:first w:where(n*n)>j:r?d;
+	o:first w;
+	v:{[r;m;(j;o;p;a)]
+		q:j+m o;
+		b:"#"=c:r q;
+		h:$[" "=c;0N 0N;b;(j;(o-1)mod 4);(q;o)];
+		h,$[b;(p,enlist h;h in p);(p;0b)]};
+	a1:-1+count u:distinct first each e:v[r;m]\[{not null first x};(j;o;();0b)];
+	u:u except(j;0N);
+	a2:"j"$sum{[v;j;o;r;m;x]last v[@[r;x;:;"#"];m]/[{not[first last x]&not null first x};(j;o;();0b)]}[v;j;o;r;m]each u;
+	(a1;a2)}

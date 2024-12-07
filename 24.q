@@ -62,3 +62,11 @@ f06:{
 	u:u except(j;0N);
 	a2:"j"$sum{[v;j;o;r;m;x]last v[@[r;x;:;"#"];m]/[{not[first last x]&not null first x};(j;o;();0b)]}[v;j;o;r;m]each u;
 	(a1;a2)}
+
+f07:{
+	f:{[o;x]
+		(a;b):"J"$@[": "vs x;1;" "vs];
+		g:{[o;a;x;y]r where a>=r:raze o .\:(x;y)};
+		a*any a=(1#b)g[o;a]/1_b};
+	p:{"J"$string[x],\:string y};
+	sum each((*;+);(*;+;p))f/:\:read0 x}

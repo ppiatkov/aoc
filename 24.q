@@ -70,3 +70,14 @@ f07:{
 		a*any a=(1#b)g[o;a]/1_b};
 	p:{"J"$string[x],\:string y};
 	sum each((*;+);(*;+;p))f/:\:read0 x}
+
+f12:{
+	n:count t:read0 x;
+	l:flip each flip(div;mod).\:(value group raze t;n); / Lists of positions for each letter
+	m:{[(g;l)](g,l where b;l where not b:l in raze g+\:/:(0 1;1 0;0 -1;-1 0))}; / Moves neighbours from list to a group
+	c:{[m;(g;l)]if[count l;(p;l):m/[(1#l;1_l)];g,:enlist p];(g;l)}m; / Collects a region
+	g:raze c{[c;l]first c/[(();l)]}'l; / Split every letter into regions
+	a:count each g; / Area
+	p:(4*a)-{sum 1=sum each abs raze x-\:/:x}each g; / Total perimeter is a sum of perimeters minus number of borders between neighbours
+	s:{sum x{sum{(00b~2#b)|110b~b:(x+/:z*/:(1 0;0 1;1 1))in y}[x;y]each(1 1;1 -1;-1 1;-1 -1)}\:x}each g; / Number of sides = number of corners
+	(sum a*p;sum a*s)}

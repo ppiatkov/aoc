@@ -81,3 +81,12 @@ f12:{
 	p:(4*a)-{sum 1=sum each abs raze x-\:/:x}each g; / Total perimeter is a sum of perimeters minus number of borders between neighbours
 	s:{sum x{sum{(00b~2#b)|110b~b:(x+/:z*/:(1 0;0 1;1 1))in y}[x;y]each(1 1;1 -1;-1 1;-1 -1)}\:x}each g; / Number of sides = number of corners
 	(sum a*p;sum a*s)}
+
+f13:{
+	t:"J"$(last''')"++="vs''/:","vs''3#'0N 4#read0 x;
+	r:@[;2;10000000000000+]each t;
+	f:{[((aX;aY);(bX;bY);(pX;pY))]
+		e:(pX*bY;aX*pY)-(pY*bX;aY*pX);
+		$[all 0=e mod d:(aX*bY)-aY*bX;e div d;0 0]};
+	g:{[f;x]sum sum 3 1*'flip f each x}f;
+	(g t;g r)}

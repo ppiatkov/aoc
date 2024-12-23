@@ -90,3 +90,16 @@ f13:{
 		$[all 0=e mod d:(aX*bY)-aY*bX;e div d;0 0]};
 	g:{[f;x]sum sum 3 1*'flip f each x}f;
 	(g t;g r)}
+
+f23:{
+	s:asc each t:`$"-"vs'read0 x; / Sorted sets of two connected computers
+	r:flip t,reverse each t;
+	c:r[1]group r 0; / Mapping computer -> list of computers connected to it
+	e:{[c;s] / Extends the fully connected sets adding one computer
+		u:c last flip s; / Try all computers connected to the last in the set
+		v:s[where count each u],'raze u;
+		v@:where c{all(-2_y)in x last y}/:v; / Keep only fully connected sets
+		distinct asc each v}c;
+	a1:count a where any each(a:e s)like\:"t*";
+	a2:","sv string first e/[{1<count x};s];
+	(a1;a2)}

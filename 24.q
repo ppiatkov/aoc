@@ -103,3 +103,8 @@ f23:{
 	a1:count a where any each(a:e s)like\:"t*";
 	a2:","sv string first e/[{1<count x};s];
 	(a1;a2)}
+
+f25:{
+	p:1_'(where 0=count each t)_t:enlist[""],read0 x;
+	"j"$sum all each count[p 0]>=raze(+/:\:).(sum'')"#"=p group[p[;0;0]]"#."
+	}

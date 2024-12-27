@@ -136,6 +136,18 @@ f13:{
 	g:{[f;x]sum sum 3 1*'flip f each x}f;
 	(g t;g r)}
 
+f14:{
+	(p;v):("JJ";",")0:/:flip 2_''" "vs't:read0 x;
+	d:101 103;
+	c:{[d;p;v;n] / Calculates quadrant counts after n seconds
+		f:(p+v*n)mod d; / Final positions
+		"j"$(sum'')(&\:/:). flip(>;<).\:(f;d div 2)}[d;p;v];
+	a1:prd raze c 100;
+	i:abs(-/'')(sum'')d#'(q;flip each q:c each til max d); / Quadrant imbalances along each dimension
+	o:{x?max x}each i; / Offsets of periodically repeating steps with anomalously large imbalances
+	a2:first(inter/)o+d*til each reverse d;
+	(a1;a2)}
+
 f23:{
 	s:asc each t:`$"-"vs'read0 x; / Sorted sets of two connected computers
 	r:flip t,reverse each t;

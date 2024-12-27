@@ -82,6 +82,20 @@ f08:{
 	a2:count distinct raze raze g .''p;
 	(a1;a2)}
 
+f09:{
+	t:0N 2#first read0 x;
+	(f;s):0 -1_'("J"$''t)./:(::;)each 0 1; / Lengths of files and free space
+	b:{(where differ x)_x}d:where f; / File blocks
+	c:{sum x*til count x}; / Calculates checksum
+	a1:c count[d]#raze b,'sums[0,s]_reverse d; / Fill free space with file blocks from the end
+	g:s#'0N; / Initial free space blocks populated by nulls
+	m:{[(b;g);j] / Tries to move a file block into a free space gap
+		$[0=count w:where count[b j]<=sum each null j#g;(b;g); / Not enough free space
+		(@[b;j;0N*];@[g;first w;{@[y;(til count x)+y?0N;:;x]}b j])]};
+	(b;g):m/[(b;g);reverse til count b]; / Try to move every file block
+	a2:c raze b,'g,enlist 0#0; / Merge blocks
+	(a1;a2)}
+
 f12:{
 	n:count t:read0 x;
 	l:flip each flip(div;mod).\:(value group raze t;n); / Lists of positions for each letter

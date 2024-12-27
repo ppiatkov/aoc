@@ -96,6 +96,18 @@ f09:{
 	a2:c raze b,'g,enlist 0#0; / Merge blocks
 	(a1;a2)}
 
+f10:{
+	t:read0 x;
+	p:raze til[count t],/:'where each t="0";
+	f:{[t;(p;h;j)] / Iterates current positions, corresponding trailheads and step #
+		w:where j=t ./:r:raze p+/:\:(0 1;1 0;-1 0;0 -1);
+		(r w;h[where count[p]#4]w;first string 1+"J"$j)
+		}t;
+	o:flip`e`s!2#f/[9;(p;til count p;"1")];
+	a1:exec sum e from select count distinct e by s from o;
+	a2:exec sum c from select c:count i by s from o;
+	(a1;a2)}
+
 f12:{
 	n:count t:read0 x;
 	l:flip each flip(div;mod).\:(value group raze t;n); / Lists of positions for each letter

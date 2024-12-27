@@ -71,6 +71,17 @@ f07:{
 	p:{"J"$string[x],\:string y};
 	sum each((*;+);(*;+;p))f/:\:read0 x}
 
+f08:{
+	n:count t:read0 x;
+	a:flip(div;mod).\:(value group w!r w:where"."<>r:raze t;n); / Antennas for each frequency
+	p:{f c where not(=).'c:r cross r:til count f:flip x}each a; / Ordered antenna pairs
+	b:raze{(2*y)-x}.''p; / First candidate antinode for each pair
+	a1:count distinct b where all each b within\:(0;n-1);
+	f:{$[0<z;ceiling(x-y)%z;0>z;1+floor y%abs z;0W]}n;
+	g:{z+/:d*/:til min x'[z;d:z-y]}f; / All antinodes starting from the second antenna in each pair
+	a2:count distinct raze raze g .''p;
+	(a1;a2)}
+
 f12:{
 	n:count t:read0 x;
 	l:flip each flip(div;mod).\:(value group raze t;n); / Lists of positions for each letter

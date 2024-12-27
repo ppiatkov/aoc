@@ -108,6 +108,14 @@ f10:{
 	a2:exec sum c from select c:count i by s from o;
 	(a1;a2)}
 
+f11:{
+	t:"J"$" "vs first read0 x;
+	b:{[(x;m)]
+		r:{$[x~0;1#1;0=(c:count s:string x)mod 2;"J"$(0;c div 2)_s;1#2024*x]}each x;
+		(key;value)@\:sum each m[where count each r]group raze r};
+	{[t;b;n]sum last b/[n;(t;count[t]#1)]}[t;b]each 25 75
+	}
+
 f12:{
 	n:count t:read0 x;
 	l:flip each flip(div;mod).\:(value group raze t;n); / Lists of positions for each letter

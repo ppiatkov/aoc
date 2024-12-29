@@ -148,6 +148,43 @@ f14:{
 	a2:first(inter/)o+d*til each reverse d;
 	(a1;a2)}
 
+f15:{
+	c:(0=count each t:read0 x)?1b;
+	w:c#t; / Map of the warehouse
+	m:raze(c+1)_t; / List of movements
+	d:">^<v"!(0 1;-1 0;0 -1;1 0); / Movement directions
+	f:{raze til[count x],/:'where each x=y}; / Finds map positions of a given char
+	w1:.[w;p1:first f[w;"@"];:;"."]; / Find initial robot position and mark it free
+	s:{[d;b;(w;p);m]$[ / Attempts to make the next step (moving some boxes if necessary)
+		"#"=o:w . n:p+d m;(w;p); / Wall ahead
+		"."=o;(w;n); / Go to the free space ahead
+		not first u:b[w;n;m];(w;p); / Immovable boxes ahead
+		(last u;n)]}d; / Shift all boxes in front and go to the space ahead
+	b1:{[d;w;p;m]$[ / Shifts a single box if possible, returns tuple (success; new map)
+		"#"=o:w . n:p+d m;(0b;w); / Wall ahead of the box
+		"."=o;(1b;.[;;:;]/[w;(p;n);".O"]); / Move the box to the free space ahead
+		not first u:.z.s[d;w;n;m];(0b;w); / Immovable boxes ahead
+		(1b;.[;;:;]/[last u;(p;n);".O"])]}d; / Shift all boxes in front and move this box
+	r:{[f;s;m;b;w;p;c]sum sum 100 1*flip f[first s[b]/[(w;p);m];c]}[f;s;m];
+	a1:r[b1;w1;p1;"O"];
+	sw:ssr/[;("OO";"@@");("[]";"@.")]each w@\:where count[w 0]#2; / Stretched warehouse map
+	w2:.[sw;p2:first f[sw;"@"];:;"."]; / Find initial robot position and mark it free
+	b2:{[d;w;p;m] / Shifts a double box if possible, returns tuple (success; new map)
+		$[m in"<>";
+			$[ / Moving box horizontally
+				"#"=o:w . n1:c+n:p+c:d m;(0b;w); / Wall ahead of the box
+				"."=o;(1b;.[;;:;]/[w;(p;n&n1;n|n1);".[]"]); / Move the box to the free space ahead
+				not first u:.z.s[d;w;n1;m];(0b;w); / Immovable boxes ahead
+				(1b;.[;;:;]/[last u;(p;n&n1;n|n1);".[]"])]; / Shift all boxes in front and move this box
+			$[ / Moving box vertically
+				any"#"=(o;o1):w ./:(n:c+p;n1:(c:d m)+p1:p+0,$["]"=w . p;-1;1]);(0b;w); / Wall ahead of the box
+				all"."=(o;o1);(1b;.[;;:;]/[w;(p;p1;n&n1;n|n1);"..[]"]);
+				not first u:.z.s[d;w;$[o in"[]";n;n1];m];(0b;w); / Immovable boxes ahead
+				not first v:.z.s[d;last u;p;m];(0b;w); / Immovable boxes ahead on the other side
+				(1b;last v)]]}d; / Shift all boxes in front and move this box
+	a2:r[b2;w2;p2;"["];
+	(a1;a2)}
+
 f23:{
 	s:asc each t:`$"-"vs'read0 x; / Sorted sets of two connected computers
 	r:flip t,reverse each t;

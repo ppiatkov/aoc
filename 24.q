@@ -185,6 +185,38 @@ f15:{
 	a2:r[b2;w2;p2;"["];
 	(a1;a2)}
 
+f16:{
+	i:j,/:\:j:til count t:read0 x; / All map indices
+	b:t{in[1_b;(1100b;0011b)]<first b:"#"<>x ./:y+/:(0 0;0 1;0 -1;1 0;-1 0)}/:/:i; / A node is not a wall or a path between walls
+	n:10b cross raze j,/:'where each b; / Nodes (direction; vertical position; horizontal position)
+	f:{[t;j;b] a:1_(,':)where b;j,''a where"#"<>t ./:j,'1+a[;1]}; / Finds horizontal links
+	h:n?1b,''raze j f[t]'b; / Horizontal links
+	v:n?0b,''(reverse'')raze j f[flip t]'flip b; / Vertical links
+	s:flip 2 0N#til count n; / Same-position links (90 degree rotation)
+	l:update`g#start from flip`start`end`score!flip(a,reverse each a:h,v,s),'a,a:raze((-).'(n@/:h)[;;2];(-).'(n@/:v)[;;1];count[s]#1000); / All links
+	q:{[t;c](i;m i:(count'[t]>m:t?'c)?1b)}; / Finds a matching char on the map
+	sn:n?1b,q[t;"S"]; / Start node
+	en:where(1_'n)~\:q[t;"E"]; / End nodes (two possible directions)
+	l:update score:0 from l where start in en,end in en; / Make end nodes equivalent to use only one of them
+	d:{[n;l;(cur;visited;scores)] / Dijkstra
+		if[null cur;:(cur;visited;scores)];
+		r:select from l where cur=start,not end in visited;
+		scores[r`end]&:r[`score]+scores cur;
+		visited,:cur;
+		w:where[scores<0W]except visited;
+		cur:w{first where x=min x}scores w;
+		(cur;visited;scores)};
+	ns:last d[n;l]/[(sn;0#0;@[count[n]#0W;sn;:;0])]; / Calculate all node scores
+	a1:ns en 0;
+	p:{[n;l;ns;en;x] / Collects all optimal paths
+		e:select from x where start=en;
+		o:select from x where not start=en;
+		e,select start:end,visited:(visited,'j)from ej[`start;o;l]where ns[end]=score+ns start};
+	m:l distinct raze exec visited from p[n;update j:i from l;ns;en 0]/[([]start:1#sn;visited:enlist 0#0)];
+	r:select 1_'n start,1_'n end from m;
+	a2:count distinct raze exec start{x+/:signum[d]*/:til 1+abs sum d:y-x}'end from r;
+	(a1;a2)}
+
 f23:{
 	s:asc each t:`$"-"vs'read0 x; / Sorted sets of two connected computers
 	r:flip t,reverse each t;

@@ -217,6 +217,29 @@ f16:{
 	a2:count distinct raze exec start{x+/:signum[d]*/:til 1+abs sum d:y-x}'end from r;
 	(a1;a2)}
 
+f17:{
+	reg:(`$'a[;1;0])!"J"$last each a:" "vs'3#t:read0 x;
+	p:"J"$","vs last" "vs last t;
+	instr:{[opc;lit;(ptr;reg;out)]
+		cmb:$[lit within 0 3;lit;lit=4;reg`A;lit=5;reg`B;lit=6;reg`C;"err"];
+		xor:{0b sv(<>). 0b vs'(x;y)};
+		$[
+			opc=0;(ptr+2;@[reg;`A;div[;prd cmb#2]];out);
+			opc=1;(ptr+2;@[reg;`B;xor lit];out);
+			opc=2;(ptr+2;@[reg;`B;:;cmb mod 8];out);
+			opc=3;($[reg`A;lit;ptr+2];reg;out);
+			opc=4;(ptr+2;@[reg;`B;xor reg`C];out);
+			opc=5;(ptr+2;reg;out,cmb mod 8);
+			opc=6;(ptr+2;@[reg;`B;:;reg[`A]div prd cmb#2];out);
+			opc=7;(ptr+2;@[reg;`C;:;reg[`A]div prd cmb#2];out)]};
+	step:{[instr;p;(ptr;reg;out)]instr[p ptr;p ptr+1;(ptr;reg;out)]}[instr;p];
+	o:{[step;p;reg]last step/[{x>first y}count p;(0;reg;0#0)]}[step;p];
+	a1:","sv string o reg;
+	u:{[o;x]o`A`B`C!(8 sv x;0;0)}o;
+	f:{[p;u;x] $[count[p]=count x 0;x;distinct a where(neg[count b 0]#p)~/:b:u each a:raze x,/:\:til 8]}[p;u];
+	a2:min 8 sv'f/[enlist 0#0];
+	(a1;a2)}
+
 f23:{
 	s:asc each t:`$"-"vs'read0 x; / Sorted sets of two connected computers
 	r:flip t,reverse each t;

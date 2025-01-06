@@ -267,6 +267,13 @@ f19:{
 	g:{[f;design]f[design]/[(1#0)!1#1]count design};
 	("j"$sum not null a;sum a:f g/:designs)}
 
+f20:{
+	(start;end):"SE"{j,w j:(count[y 0]>w:y?'x)?1b}\:t:read0 x;
+	step:{[t;(cur;prv)](first n[where"#"<>t ./:n:cur+/:(0 1;1 0;0 -1;-1 0)]except enlist prv;cur)};
+	c:count path:first each step[t]\[{not x~first y}end;(start;0N 0N)];
+	r:raze n{[path;n;x]b where n<=x-a+b:sum each abs path[x]-'/:path a:til 1+x-n}[path]/:n+til c-n:100;
+	"j"$sum each r<=/:2 20}
+
 f23:{
 	s:asc each t:`$"-"vs'read0 x; / Sorted sets of two connected computers
 	r:flip t,reverse each t;

@@ -257,6 +257,16 @@ f18:{
 	a2:","sv string t first b/[(m;-1+count t)];
 	(a1;a2)}
 
+f19:{
+	(towels;designs):(", "vs first@;2_)@\:read0 x;
+	t:count'[towels]!towels,'"*";
+	f:{[t;design;ways]
+		if[count[design]<=offset:min key ways;:ways];
+		ways[offset+where(offset _design)like/:t]+:ways offset;
+		(k where offset<k:key ways)#ways}t;
+	g:{[f;design]f[design]/[(1#0)!1#1]count design};
+	("j"$sum not null a;sum a:f g/:designs)}
+
 f23:{
 	s:asc each t:`$"-"vs'read0 x; / Sorted sets of two connected computers
 	r:flip t,reverse each t;

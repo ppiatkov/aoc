@@ -240,6 +240,23 @@ f17:{
 	a2:min 8 sv'f/[enlist 0#0];
 	(a1;a2)}
 
+f18:{
+	t:"J"$","vs'read0 x;
+	d:{[n;t;(cur;visited;scores)] / Dijkstra
+		if[()~cur;:(cur;visited;scores)];
+		new:(cur+/:(1 0;-1 0;0 1;0 -1))except t,visited;
+		new@:where all each new within(0;n-1);
+		scores:.[;;(1+scores . cur)&]/[scores;new];
+		visited,:enlist cur;
+		w:raze[til[n],/:'where each scores<0W]except visited;
+		cur:w{first where x=min x}scores ./:w;
+		(cur;visited;scores)};
+	f:{[d;n;t;m]a:d[n;m#t]/[(0 0;();.[(n;n)#0W;0 0;:;0])];last[a].(n-1;n-1)}[d;71;t];
+	a1:f m:1024;
+	b:{[f;(s;e)]$[e=s+1;(s;e);0W=f a:"j"$(s+e)%2;(s;a);(a;e)]}f; / Binary search
+	a2:","sv string t first b/[(m;-1+count t)];
+	(a1;a2)}
+
 f23:{
 	s:asc each t:`$"-"vs'read0 x; / Sorted sets of two connected computers
 	r:flip t,reverse each t;

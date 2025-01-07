@@ -274,6 +274,54 @@ f20:{
 	r:raze n{[path;n;x]b where n<=x-a+b:sum each abs path[x]-'/:path a:til 1+x-n}[path]/:n+til c-n:100;
 	"j"$sum each r<=/:2 20}
 
+f21:{
+	// D(N,X,Y) - shortest distance between keys X an Y at level N.
+	// It is defined as the minimal number of basic (level 0) key presses
+	// required to be made after pressing key X before key Y can be pressed.
+	// D(N,X,X)=0.
+	// Assume D(N,X,Y) is known for all X and Y at a given N.
+	// We need to calculate D(N+1,X,Y) for all X and Y.
+	// Define a "node" as a tuple (key position at level N; key position at level N+1).
+	// The links are:
+	// (X;Z) -> (Y;Z), weight = D(N,X,Y)
+	// (X;Z) -> (X;X[Z]), weight = 1 (if X[Z] exists)
+	// D(N+1,X,Y) = shortest path from (A;X) to (A;Y).
+	nextDists:{[dirs;map;nodes;allkeys;dists]
+		f:{[dirs;map;nodes;allkeys;dists;x]
+			neighbours:{[dirs;map;dists;node]
+				n:dirs except x:node 0;
+				w:dists x,'n;
+				a:(n,'y:node 1;w);
+				$[null b:map(y;x);a;(a[0],enlist(x;b);w,1)]}[dirs;map];
+			d:{[neighbours;dists;nodes;(cur;visited;scores)] / Dijkstra
+				if[null cur;:(cur;visited;scores)];
+				(neighbs;weights):neighbours[dists;nodes cur];
+				n:nodes?neighbs;
+				n@:w:where not n in visited;weights@:w;
+				scores[n]&:weights+scores cur;
+				visited,:cur;
+				w:where[scores<0W]except visited;
+				cur:w{first where x=min x}scores w;
+				(cur;visited;scores)}[neighbours;dists;nodes];
+			r:d/[(j;0#0;@[count[nodes]#0W;j:nodes?"A",x;:;0])];
+			(x,'allkeys)!(nodes!last r)"A",'allkeys}[dirs;map;nodes;allkeys;dists];
+		raze f each allkeys};
+	compl:{[nextDists;t;n]
+		nk:("789";"456";"123";" 0A"); / Numeric keypad
+		dk:(" ^A";"<v>"); / Directional keypad
+		kd:{ / Creates dict (start_key;direction) -> destination_key for a keypad
+			f:{(reverse each a;a@:where all each" "<>a:raze 1_'(,':')x)};
+			o:raze p:raze f each(x;flip x);
+			(o[;0],'"><v^"where count each p)!o[;1]};
+		(dnum;ddir):kd each(nk;dk);
+		dnodes:dirs cross dirs:raze[dk]except" ";
+		nnodes:dirs cross nums:raze[nk]except" ";
+		dists0:dnodes!count[dnodes]#0;
+		dists:nextDists[dirs;ddir;dnodes;dirs]/[n;dists0];
+		dists:nextDists[dirs;dnum;nnodes;nums;dists];
+		sum dists{("J"$y except"A")*sum(1+x)@/:1_({y,x}':)"A",y}/:t}[nextDists;read0 x];
+	compl each 2 25}
+
 f23:{
 	s:asc each t:`$"-"vs'read0 x; / Sorted sets of two connected computers
 	r:flip t,reverse each t;

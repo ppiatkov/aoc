@@ -322,6 +322,18 @@ f21:{
 		sum dists{("J"$y except"A")*sum(1+x)@/:1_({y,x}':)"A",y}/:t}[nextDists;read0 x];
 	compl each 2 25}
 
+f22:{
+	f:{[n]
+		x:-24#0b vs n; / mod 16777216
+		x:x<>6_x,6#0b; / XOR[n;n*64]
+		x:x<>(5#0b),-5_x; / XOR[n;n div 32]
+		x:x<>11_x,11#0b; / XOR[n;n*2048]
+		0b sv(40#0b),x};
+	a1:sum last each a:f\[2000;]each "J"$read0 x;
+	g:{first each(3_x)group sum 1 20 400 8000*10+(-3+count x)#'til[4]_\:y};
+	a2:max sum g .'flip 1_''(b;c:deltas each b:a mod 10);
+	(a1;a2)}
+
 f23:{
 	s:asc each t:`$"-"vs'read0 x; / Sorted sets of two connected computers
 	r:flip t,reverse each t;

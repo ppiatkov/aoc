@@ -347,6 +347,42 @@ f23:{
 	a2:","sv string first e/[{1<count x};s];
 	(a1;a2)}
 
+f24:{[x]
+	p:(("SB";":");("SSSSS";" "))0:'0 1_'(0,where 0=count each t)_t:read0 x;
+	w:(!/)p 0; / Initial wire values
+	g:p[1;4]!asc each flip 3#p 1; / Output -> (op, sorted inputs) map
+	f:{[(w;g)]
+		if[0=count g;:(w;g)];
+		b:all each(1_'g)in key w;
+		j:where all each(1_'g)in key w;
+		d:j!eval each(`AND`OR`XOR!(&;|;<>);w;w)@'/:g j;
+		(w,d;j _g)};
+	w:first f/[(w;g)]; / Final wire values
+	a1:0b sv -64#(64#0b),w z:desc k where(k:key w)like"z*";
+	// Need to identify a, b, c, d from correct addition implementation:
+	// x[i] XOR y[i] = a[i]
+	// x[i] AND y[i] = b[i]
+	// a[i] XOR c[i] = z[i]
+	// a[i] AND c[i] = d[i]
+	// b[i] OR d[i] = c[i+1]
+	// and the erroneous swapped outputs.
+	r:update x:(`$"x",'1_'string z),y:(`$"y",'1_'string z),a:`,b:`,c:`,d:` from([]reverse z);
+	r[1;`c]:g?`AND`x00`y00;
+	m:{[g;(r;s);j]
+		if[ez:r[j;`z]<>z:first where(g[;0]=`XOR)&r[j;`c]in/:g[;1 2];s,:z];
+		r[j;`a]:first g[z]except`XOR,r[j;`c];
+		if[ea:r[j;`a]<>a:g?`XOR,xy:asc r[j;`x`y];s,:a];
+		b:g?`AND,xy;
+		r[j;`b]:$[eb:0=count w:where(o:g[;0]=`OR)&b in/:g[;1 2];[s,:b;$[ez;z;ea;a;'"nyi"]];b];
+		c:$[eb;$[1=count v:where o&r[j;`b]in/:g[;1 2];first v;'"nyi"];first w];
+		r[j;`d]:first g[c]except`OR,r[j;`b];
+		if[r[j;`d]<>d:g?`AND,asc r[j;`a`c];s,:d];
+		if[ec:c=r[j;`z];s,:c];
+		r[j+1;`c]:$[ec;$[ez;z;'"nyi"];c];
+		(r;s)};
+	a2:","sv string asc last m[g]/[(r;0#`);-1_1_til count r];
+	(a1;a2)}
+
 f25:{
 	p:1_'(where 0=count each t)_t:enlist[""],read0 x;
 	"j"$sum all each count[p 0]>=raze(+/:\:).(sum'')"#"=p group[p[;0;0]]"#."

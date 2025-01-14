@@ -47,20 +47,26 @@ f05:{
 	(a1;a2)}
 
 f06:{
-	n:2+count first i:read0 x;
-	r:raze r,(" ",/:i,\:" "),r:enlist n#" ";
-	m:(1;neg n;-1;n);
-	d:">^<v";
-	j@:first w:where(n*n)>j:r?d;
-	o:first w;
-	v:{[r;m;(j;o;p;a)]
-		q:j+m o;
-		b:"#"=c:r q;
-		h:$[" "=c;0N 0N;b;(j;(o-1)mod 4);(q;o)];
-		h,$[b;(p,enlist h;h in p);(p;0b)]};
-	a1:-1+count u:distinct first each e:v[r;m]\[{not null first x};(j;o;();0b)];
-	u:u except(j;0N);
-	a2:"j"$sum{[v;j;o;r;m;x]last v[@[r;x;:;"#"];m]/[{not[first last x]&not null first x};(j;o;();0b)]}[v;j;o;r;m]each u;
+	n:count t:read0 x;
+	w:where each b:"#"=t; / Obstructions
+	m:(reverse'[n-1+a];w;reverse a:@[;;,;]/[(n;0)#0;w;til n];reverse'[reverse n-1+w]); / Obstruction map in four orientations
+	s:j[k],-1+n-k:(n>j:t?'"^")?1b; / Starting position
+	r:{[n;o;(x;y)]((x;y);(y;a);(a:-1+n-x;b);(b:-1+n-y;x))o}n; / Rotates to the first map orientation
+	f:{[r;n;v;m;(o;(x;y);p)]
+		// Moves to obstruction, iterates
+		// - o: orientation
+		// - (x;y): position relative to map orientation
+		// - p: accumulated visited absolute positions (v=1b) or final relative positions + orientations (v=0b)
+		b:m[o]x; / Obstructions on current row
+		h:$[e:count[b]=j:b binr y;n;b j]-1; / Final horizontal position
+		no:$[e;0N;(o+1)mod 4]; / New orientation (or null if the guard leaves the mapped area)
+		xy:r[3](x;h); / Final position relative to the new orientation
+		(no;xy;p,$[v;flip r[o](x;y+1+til h-y);enlist xy,no])}[r;n];
+	a1:count a:distinct last f[1b;m]/[{not null first x};(0;s;enlist s)];
+	g:{[f;m;s;r;a]
+		xm:m{@[x;y 0;'[asc;y[1],]]}'0 3 2 1 r\:a; / Map extended with a new obstruction
+		not null first f[0b;xm]/[{[(o;xy;p)]not[null o]&not any(xy,o)in -1_p};(0;s;enlist s,0)]}[f;m;s;r];
+	a2:"j"$sum g each a except enlist s;
 	(a1;a2)}
 
 f07:{

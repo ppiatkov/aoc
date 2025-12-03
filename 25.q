@@ -15,3 +15,7 @@ f02:{
 	g:{[h;r;c]distinct raze r h/:c}h; / Calculates invalid IDs for a given range and all given group counts
 	f:{[g;r;c]sum raze g .'flip(r;c)}g; / Sums invalid IDs for all ranges and all given group counts
 	r f/:(c inter'2;c)}
+
+f03:{
+	f:{"J"$first{[(b;y);x](b,a;(1+y?a:max(1-x)_y)_y)}/[("";y);reverse 1+til x]};
+	sum each 2 12 f/:\:read0 x}

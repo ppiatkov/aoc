@@ -19,3 +19,9 @@ f02:{
 f03:{
 	f:{"J"$first{[(b;y);x](b,a;(1+y?a:max(1-x)_y)_y)}/[("";y);reverse 1+til x]};
 	sum each 2 12 f/:\:read0 x}
+
+f04:{
+	e:enlist count[first t:read0 x]#" ";
+	m:((').'v cross h),/(v;h):((e,-1_;,[;e]1_);(" ",'-1_';,'[;" "]1_'));
+	r:{@[;;:;"x"]'[y;where each("@"=y)&4>sum"@"=x@\:y]}m;
+	(sum/')"x"=(r;r/)@\:t}

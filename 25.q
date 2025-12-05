@@ -25,3 +25,14 @@ f04:{
 	m:((').'v cross h),/(v;h):((e,-1_;,[;e]1_);(" ",'-1_';,'[;" "]1_'));
 	r:{@[;;:;"x"]'[y;where each("@"=y)&4>sum"@"=x@\:y]}m;
 	(sum/')"x"=(r;r/)@\:t}
+
+f05:{
+	b:(0=count each i:read0 x)?1b;
+	r:"J"$"-"vs'b#i; / Ranges
+	ids:"J"$(b+1)_i;
+	m:{[r] / Merges adjacent and overlapping end-exclusive ranges
+		(s;e):flip r;
+		p:0!update sums s from select sum s by e from([]s,e;1 -1 where 2#count s); / Accumulated +/- are zero at merged ranges' endpoints
+		p[`e]@/:(0,-1_w+1;w:where 0=p`s)};
+	(s;e):m r+\:0 1;
+	(sum max ids within/:r;sum e-s)}

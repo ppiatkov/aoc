@@ -36,3 +36,7 @@ f05:{
 		p[`e]@/:(0,-1_w+1;w:where 0=p`s)};
 	(s;e):m r+\:0 1;
 	(sum max ids within/:r;sum e-s)}
+
+f06:{
+	o:(prd;sum)"+"=l w:where" "<>l:last t:read0 x;
+	sum each o@'/:"J"$'''(flip';::)@\:w _flip -1_t}

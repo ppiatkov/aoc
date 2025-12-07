@@ -40,3 +40,5 @@ f05:{
 f06:{
 	o:(prd;sum)"+"=l w:where" "<>l:last t:read0 x;
 	sum each o@'/:"J"$'''(flip';::)@\:w _flip -1_t}
+
+f07:{(::;sum)@'{[(n;s);t](n+sum 0<a;(s*not b)+(1_a,0)+0,-1_a:s*b:"^"=t)}/[(0;"S"=t 0);1_t:read0 x]}

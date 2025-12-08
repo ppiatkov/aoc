@@ -42,3 +42,17 @@ f06:{
 	sum each o@'/:"J"$'''(flip';::)@\:w _flip -1_t}
 
 f07:{(::;sum)@'{[(n;s);t](n+sum 0<a;(s*not b)+(1_a,0)+0,-1_a:s*b:"^"=t)}/[(0;"S"=t 0);1_t:read0 x]}
+
+f08:{
+	r:"J"$","vs'read0 x; / Junction box coordinates
+	p:r j:raze j,''til each j:til c:count r; / Coordinates of junction box pairs
+	i:j iasc sum each v*v:(-).'p; / Pairs of junction box indexes sorted by distance
+	f:{[i;n] / Returns grouped indexes of junction boxes for a given number of them connected
+		(s;e):reverse[a],'a:flip n#i; / Start and end indexes of each connected pair
+		d:e group s; / Direct connections of each box
+		g:{[(u;d)]$[count d;(u,enlist x;(x:{distinct y,/x y}[d]/[1#key d])_d);(u;d)]}; / Groups connected boxes
+		first(g/)(();d)}i;
+	a1:{prd 3#desc count each x}f 1000;
+	b:{[c;f;(s;e)]$[1=e-s;(s;e);c=count first f m:(s+e)div 2;(s;m);(m;e)]}[c;f]; / Binary search of threshold connection number
+	a2:first prd r i first(b/)(0;count i);
+	(a1;a2)}

@@ -56,3 +56,19 @@ f08:{
 	b:{[c;f;(s;e)]$[1=e-s;(s;e);c=count first f m:(s+e)div 2;(s;m);(m;e)]}[c;f]; / Binary search of threshold connection number
 	a2:first prd r i first(b/)(0;count i);
 	(a1;a2)}
+
+f09:{
+	g:"J"$","vs'read0 x; / Coordinates of green tiles
+	i:raze i,''til each i:til count g; / Tile pair indexes
+	s:flip{distinct asc x}'[t]?'t:flip g; / Shrinked tile coordinates
+	b:raze s{flip x+(y<>0)*\:signum[s]*til abs s:sum y}'1_deltas s,1#s; / Loop border coordinates
+	a:.[;;not]/[(3+max s)#0b;1+b]; / Boolean mask of loop border positions (edges added to canvas)
+	f:{[(a;x)] / Iteratively finds empty space outside border
+		a:.[;;not]/[a;x]; / Mark previously found empty spots
+		y:raze x+/:\:(0 1;1 0;0 -1;-1 0); / Next candidates
+		y@:where(0<all each y within'\:0,'-1+count each(a;a 0))&not a ./:y; / Must be empty, inside canvas and not found previously
+		(a;distinct y)};
+	w:-1_'1_'-1_1_a|not first f/[(a;enlist 0 0)]; / Boolean mask for all tiles
+	j:i where all each w ./:/:{(x;y;x[0],y 1;x[1],y 0)}.'s i; / All rectangle corners must have tiles
+	j@:where{[w;x;y]l:(x&y)+til each abs x-y;all w ./:raze raze(l[0],'/:(x 1;y 1);(x 0;y 0),'\:l 1)}[w].'s j; / All edges must have tiles
+	g{max prd each 1+abs(-).'x y}/:(i;j)}
